@@ -22,7 +22,14 @@ class GrafoDirecto:
             return
 
         self.grafico_dict[inicio].append((fin, peso, tiempo))
-
+    
+    def __str__(self):
+        todas_aristas = []
+        for origen, conexiones in self.grafico_dict.items():
+            for destino, distancia, tiempo in conexiones:
+                todas_aristas.append(f"{origen} --({distancia} km, {tiempo} min)--> {destino}")
+        return "\n".join(todas_aristas)
+    
     # a. Verificar si hay una única carretera entre A y B
     def estan_conectadas_directamente(self, ciudad1, ciudad2):
         if ciudad1 in self.grafico_dict:
@@ -93,6 +100,9 @@ class Arista:
 # Construcción del grafo desde el archivo
 def construir_grafo(nombre_archivo="DatosVias.txt"):
     grafo = GrafoDirecto()
+    
+    
+    
 
     with open(nombre_archivo, "r", encoding="utf-8") as archivo:
         for linea in archivo:
@@ -107,14 +117,15 @@ def construir_grafo(nombre_archivo="DatosVias.txt"):
             grafo.agregar_vertice(origen)
             grafo.agregar_vertice(destino)
             grafo.agregar_arista(Arista(origen, destino, distancia, tiempo))
-
+    print(grafo.__str__())
+    
     return grafo
+
 
 
 # Ejecutar la construcción del grafo y probar las funcionalidades
 if __name__ == "__main__":
     grafo = construir_grafo()
-
     ciudad_a = input("Ingrese la primera ciudad: ").strip()
     ciudad_b = input("Ingrese la segunda ciudad: ").strip()
 
@@ -129,3 +140,5 @@ if __name__ == "__main__":
 
     # c. Encontrar el camino más corto por tiempo
     print(grafo.camino_mas_corto_tiempo(ciudad_a, ciudad_b))
+    
+    
